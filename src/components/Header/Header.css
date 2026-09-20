@@ -1,0 +1,22 @@
+.wrapper-header{
+    background-color: #000000;
+    padding: 15px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between ;
+    gap: 15px;
+}
+
+.header-group{
+    display: flex;
+    flex-direction:row ;
+    justify-content: space-around;
+    gap: 15px;
+}
