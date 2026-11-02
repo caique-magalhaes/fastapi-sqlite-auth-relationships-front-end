@@ -9,16 +9,12 @@ import { useAuthContext } from './context/AuthContext'
 
 export default function  App(){
     const postSectionRef = useRef(null)
-    const {posts} = usePostContext()
     const {getAllPosts,getUSer} = useApi()
-    const {user, setUser} = useAuthContext()
+    const {user} = useAuthContext()
 
    useEffect( () =>{const verifyUser = async() =>{
-          try {
-            await getUSer(setUser)
-          } catch (error) {
-            setUser(null)
-          }}
+          await getUSer()
+          }
           verifyUser()
         }, [])
 
@@ -41,7 +37,7 @@ export default function  App(){
   return(
         <main>
           <FormPost user={user} onFormSubmitSuccess={scrollToPost}/>
-          <Post posts={posts} targetRef={postSectionRef} />
+          <Post action='submitPost' targetRef={postSectionRef} />
         </main>
   )
 }

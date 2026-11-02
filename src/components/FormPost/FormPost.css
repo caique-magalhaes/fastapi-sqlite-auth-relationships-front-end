@@ -1,6 +1,12 @@
 .alert-login{
-    background-color: #f89797;
+    background-color: #E8AEB7;
     padding: 25px;
     color: #ff0000;
     border-radius: 8px;
 }
+
+.form-subtitle{
+    font-weight: 500;
+    color: #4A7C59;
+}
+

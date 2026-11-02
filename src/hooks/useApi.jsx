@@ -1,8 +1,11 @@
+import { useAuthContext } from "../context/AuthContext"
 import { usePostContext } from "../context/PostContext"
 import { useNavigate } from "react-router-dom"
 
 export default function useApi(){
     const {setPost} = usePostContext()
+    const {setUser,user} = useAuthContext()
+
     const navigate = useNavigate()
     async function submitLogin (values, setUser){
             try {
@@ -61,14 +64,42 @@ export default function useApi(){
             const savePost = await response.json()
 
             setPost((prevPost) => [{
-                id:savePost.id, title: savePost.title, description: savePost.description, user_id: savePost.user_id}, ...prevPost])
+                id:savePost.id, title: savePost.title, description: savePost.description, user_id: savePost.user_id, like_count:0}, ...prevPost])
         }
-        } catch (err) {
-            console.error(`Failed to save post to backend: ${err})`)
+        } catch (error) {
+            console.error(`Failed to save post to backend: ${error})`)
         }
     }
 
-    async function getUSer(setUser){
+    async function editPost(data,post_id){
+        try {
+            const response = await fetch(`http://localhost:8000/post/post-change/${post_id}`,{
+                method:'PUT',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                credentials:'include',
+                body:JSON.stringify({
+                title: data.title,
+                description: data.description
+            })
+
+            })
+
+            if(response.ok){
+                const savePost = await response.json()
+
+                setPost((prevPost)=>prevPost.map((post)=>post.id == post_id ? {...post, title:savePost.title, description:savePost.description} : post))
+            }else {
+            console.error(`Failed to edit post: Status ${response.status}`);
+        }
+
+        } catch (error) {
+            console.error(`Failed to edit post to backend: ${error})`)
+        }
+    }
+
+    async function getUSer(){
         try {
             const response = await fetch('http://localhost:8000/user/me',{
                 method:"GET",
@@ -81,6 +112,7 @@ export default function useApi(){
             }
         } catch (error) {
             console.error(`Failed to get the user: ${error}`)
+            setUser(null)
         }
     }
 
@@ -91,12 +123,59 @@ export default function useApi(){
             if (response.ok) {
                 const data = await response.json()
                 setPost([...data].reverse())
+            }else{
+              setPost(null)
+            }
+        } catch (error) {
+            console.error(`Error:${error.message}`)
+        }
+    }
+    async  function likePost(post_id){
+        const isLiked = user.like_post_ids.includes(post_id)
+
+            setUser((prevUser) => ({
+                ...prevUser,
+                like_post_ids: isLiked ? prevUser.like_post_ids.filter((id)=> id !== post_id) : [...prevUser.like_post_ids, post_id]
+            }))
+            setPost((prevPost) => prevPost.map(post =>{
+                if (post.id === post_id){
+                    return {
+                        ...post,
+                        like_count: isLiked ? post.like_count -1 : post.like_count + 1
+                    }
+                }
+                return post
+            }))
+
+        try {
+            const response = await fetch(`http://localhost:8000/post/post-like/${post_id}`,{
+                method:'POST',
+                credentials:'include'
+            })
+
+            if (response.ok){
+                const data = await response.json()
+                console.log(`Success: ${data}`)
             }
         } catch (error) {
             console.error(`Error:${error.message}`)
         }
     }
 
+    async function logout(){
 
-    return{submitLogin, getAllPosts, submit, getUserPost,getUSer}
+    try {
+        const response = await  fetch("http://localhost:8000/user/logout",{
+                method:"POST",
+                credentials:'include'
+            })
+            if(response.ok){
+                setUser(null)
+                navigate('/login')
+            }
+    } catch (error) {
+        console.error(`error: ${error}`)
+    }
+    }
+    return {submitLogin, getAllPosts, submit, getUserPost,getUSer, likePost, logout, editPost}
 }

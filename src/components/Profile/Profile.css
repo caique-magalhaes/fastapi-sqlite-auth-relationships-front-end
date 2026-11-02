@@ -1,0 +1,11 @@
+.wrapper-post h2{
+    color: #8ECAE6;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.wrapper-post-subtitle{
+    color: #4A7C59;
+    font-weight: 600;
+    margin-top: 10px;
+}

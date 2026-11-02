@@ -1,5 +1,6 @@
 .card-title{
     font-weight: bold;
+    color: #2B2D42;
 }
 
 .card{
@@ -8,8 +9,57 @@
      padding: 20px;
      margin: 20px 0;
      border-radius: 8px;
+     background-color: #FFFFFF;
 }
 
 .card-description{
     margin-top: 10px;
+    color: #2B2D42;
+}
+
+.icon-heart-drawing, .icon-heart-filled {
+    width: 25px;
+    margin-top: 10px;
+}
+
+.icon-heart-drawing:hover, .icon-heart-filled:hover {
+    cursor: pointer;
+}
+
+.wrapper-like{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.wrapper-like span{
+    margin-top: 10px;
+}
+
+.edit-icon{
+    width: 25px;
+    margin-left: 10px;
+    margin-top: 6px ;
+}
+
+.edit-icon:hover{
+    cursor: pointer;
+}
+
+.card-info{
+    color: #2B2D42;
+}
+
+.cancel-btn{
+    margin-top: -20px;
+    margin-bottom: 20px;
+    width: 200px;
+    padding: 10px;
+    background-color: #E8AEB7;
+    border: 1px solid #E8AEB7;
+    border-radius: 8px;
+    color: #ff0000;
+}
+
+.cancel-btn:hover{
+    cursor: pointer;
 }

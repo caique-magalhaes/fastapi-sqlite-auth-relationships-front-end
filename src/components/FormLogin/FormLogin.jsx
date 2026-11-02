@@ -2,6 +2,7 @@ import { useFormik } from "formik"
 import * as Yup from 'yup'
 import {useAuthContext } from "../../context/AuthContext"
 import useApi from "../../hooks/useApi"
+import './FormLogin.css'
 
 export default function FormLogin(){
     const {setUser} = useAuthContext()
@@ -19,8 +20,8 @@ export default function FormLogin(){
         },
 
         validationSchema:Yup.object().shape({
-            email:Yup.string().email("Invalid email address").required("Email is Required"),
-            password:Yup.string().min(6).required("Password is required")
+            email:Yup.string().email("Email Inválido").required("Email é Obrigatório"),
+            password:Yup.string().min(6).required("Senha é Obrigatória")
         })
     })
     return(
@@ -41,7 +42,7 @@ export default function FormLogin(){
                     {formik.touched.email && formik.errors.email && (<span className="error-description">{formik.errors.email}</span>)}
                 </div>
                 <div className="form-field">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Senha</label>
                      <input
                     type="password"
                     id="password"
@@ -53,7 +54,7 @@ export default function FormLogin(){
 
                     {formik.touched.password && formik.errors.password && (<span className="error-description">{formik.errors.password}</span>)}
                 </div>
-                <button className="submit-btn" type="submit">Submit</button>
+                <button className="submit-btn" type="submit">Enviar</button>
             </form>
         </div>
     )

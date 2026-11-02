@@ -4,6 +4,10 @@
   --main-font: "Poppins",sans-serif
 }
 
+body{
+    background-color: #F8F9FA;
+}
+
 .form-field {
     display: flex;
     flex-direction: column;

@@ -14,9 +14,37 @@
     gap: 15px;
 }
 
+.header-nav a{
+    color: #6B9080;
+    text-decoration: none;
+    font-weight: 200;
+}
+
+.header-nav a:hover{
+    text-decoration: underline;
+}
+
+
+.header-title a{
+    color: #6B9080;
+    text-decoration: none;
+    font-weight: 600;
+}
+
 .header-group{
     display: flex;
     flex-direction:row ;
     justify-content: space-around;
+    align-content: center;
     gap: 15px;
+}
+
+.btn-logout{
+    background-color: #6B9080;
+    padding: 4px;
+    border: 1px solid #6B9080;
+    border-radius: 8px;
+}
+.btn-logout:hover{
+    cursor: pointer;
 }

@@ -3,34 +3,17 @@ import {useAuthContext } from "../../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import './Header.css'
+import useApi from "../../hooks/useApi";
 
 
 export default  function Header(){
-    const navigate = useNavigate()
-    const {user,setUser} = useAuthContext()
-
-    const logout = async () =>{
-
-    try {
-        const response = await  fetch("http://localhost:8000/user/logout",{
-                method:"POST",
-                credentials:'include'
-            })
-            if(response.ok){
-                const data = response.json()
-                console.log(data)
-                setUser(null)
-                navigate('/login')
-            }
-    } catch (error) {
-        console.error(`error: ${error}`)
-    }
-    }
+    const {logout} = useApi()
+    const {user} = useAuthContext()
     const isLoggedIn = user
 
    return(
                 <div className="wrapper-header">
-                    <header><Link to="/">Social Advice</Link></header>
+                    <header className="header-title"><Link to="/">Pode Falar</Link></header>
                     <nav className="header-nav">
                             <Link to="/">Home</Link>
                             {
@@ -43,12 +26,12 @@ export default  function Header(){
                                         <Link to="#">
                                             <FontAwesomeIcon icon={faUser} size="75px" />
                                         </Link>
-                                         <button onClick={logout}>logout</button>
+                                         <button className="btn-logout" onClick={logout}>LOGOUT</button>
                                     </div>
                                 ):(
                                     <div className="header-group">
                                         <Link to="/register">Register</Link>
-                                        <Link to="/login">login</Link>
+                                        <Link to="/login">LOGIN</Link>
                                     </div>
                                 )
                             }

@@ -16,7 +16,6 @@ export default function FormRegister(){
                 password: values.password,
                 name: values.name,
                 confirm_password: values.confirm_password,
-                city: values.city,
                 country: values.country
 
             })
@@ -46,7 +45,6 @@ export default function FormRegister(){
             password:'',
             name:'',
             confirm_password:'',
-            city:'',
             country:''
 
         },
@@ -57,25 +55,24 @@ export default function FormRegister(){
         },
 
         validationSchema:Yup.object().shape({
-            email:Yup.string().email("Invalid email address").required("Email is Required"),
-            password:Yup.string().min(8,"Must be at least 8 characters long")
-            .notOneOf(forbiddenPasswords, "That password is too common! Choose a stronger one.")
-            .matches(/^(?!.*password).*$/i, "Password cannot contain the word 'password'")
-            .matches(/[A-Z]/,"Must contain at least one uppercase letter")
-            .matches(/[a-z]/, "Must contain at least one lowercase letter")
-            .matches(/[0-9]/, "Must contain at least one number")
-            .required("Password is required"),
-            name:Yup.string().required("Name is Required"),
-            confirm_password:Yup.string().oneOf([Yup.ref('password')], 'Passwords must match').required("Confirm Password must be filled"),
-            city:Yup.string().required("City is Required"),
-            country:Yup.string().required("Country is Required")
+            email:Yup.string().email("Email Inválido").required("Email é Obrigatório"),
+            password:Yup.string().min(8,"A senha deve ter ao menos 8 caracteres")
+            .notOneOf(forbiddenPasswords, "Esse senha e muito comum escolha uma mais forte.")
+            .matches(/^(?!.*password).*$/i, "A senha nao pode conter a palavra 'password'")
+            .matches(/[A-Z]/,"Deve conter ao menos uma letra maiúscula")
+            .matches(/[a-z]/, "Deve conter ao menos uma letra minúscula ")
+            .matches(/[0-9]/, "Deve conter ao menos um número")
+            .required("A senha é obrigatória"),
+            name:Yup.string().required("Nome é Obrigatório"),
+            confirm_password:Yup.string().oneOf([Yup.ref('password')], 'As senhas não coincidem').required("Confirmação de senha deve ser preenchida"),
+            country:Yup.string().required("País deve ser selecionado")
         })
     })
     return(
         <div className="wrapper-form">
             <form onSubmit={formik.handleSubmit}>
                 <div className="form-field">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Nome</label>
                     <input
                     type="text"
                     id="name"
@@ -88,29 +85,19 @@ export default function FormRegister(){
                 </div>
 
                 <div className="form-field">
-                    <label htmlFor="country">Country</label>
-                    <input
+                    <label htmlFor="country">País</label>
+                    <select
                     type="country"
                     id="country"
                     name="country"
                     placeholder="country" 
                     className={formik.touched.country && !!formik.errors.country ? "error-input" : "input-field"}
-                    {...formik.getFieldProps("country")}
-                    />
+                    {...formik.getFieldProps("country")}>
+                        <option value="" disabled> Selecione seu País</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                    </select>
                     {formik.touched.country && formik.errors.country && (<span className="error-description">{formik.errors.country}</span>)}
-                </div>
-
-                <div className="form-field">
-                    <label htmlFor="city">City</label>
-                    <input 
-                    className={formik.touched.city && !!formik.errors.city ? "error-input" : "input-field"}
-                    type="text"
-                    id="city"
-                    name="city"
-                    placeholder="city" 
-                    {...formik.getFieldProps("city")}
-                    />
-                    {formik.touched.city && formik.errors.city && (<span className="error-description">{formik.errors.city}</span>)}
                 </div>
 
                 <div className="form-field">
@@ -126,7 +113,7 @@ export default function FormRegister(){
                     {formik.touched.email && formik.errors.email && (<span className="error-description">{formik.errors.email}</span>)}
                 </div>
                  <div className="form-field">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Senha</label>
                     <input 
                     className={formik.touched.password && !!formik.errors.password ? "error-input" : "input-field"}
                     type="password"
@@ -139,7 +126,7 @@ export default function FormRegister(){
                 </div>
 
                 <div className="form-field">
-                    <label htmlFor="confirm-password">Cofirm Password</label>
+                    <label htmlFor="confirm-password">Confirme a Senha</label>
                     <input 
                     className={formik.touched.confirm_password && !!formik.errors.confirm_password ? "error-input" : "input-field"}
                     type="password"
@@ -150,7 +137,7 @@ export default function FormRegister(){
                     />
                     {formik.touched.confirm_password && formik.errors.confirm_password && (<span className="error-description">{formik.errors.confirm_password}</span>)}
                 </div>
-                <button className="submit-btn">Register</button>
+                <button className="submit-btn">Registrar</button>
             </form>
         </div>
     )

@@ -4,25 +4,34 @@ import useApi from "../../hooks/useApi"
 import './FormPost.css'
 
 
-export default function FormPost({onFormSubmitSuccess,user}){
-    const {submit} = useApi()
+export default function FormPost({onFormSubmitSuccess,user,action,post}){
+    const {submit,editPost} = useApi()
 
     const formik = useFormik(
         {
             initialValues:{
-                title:"",
-                description:"",
+                title:post?.title || "",
+                description:post?.description || "",
 
             },
+            enableReinitialize: true, //updates fields
             onSubmit: async (values) => {
-                await submit(values)
+                if(action === 'edit'){
+                    await editPost(values,post.id)
+                }
+
+                if (action === 'submitPost'){
+                    await submit(values)
+                }
                 formik.resetForm()
+                if (onFormSubmitSuccess) {
                 onFormSubmitSuccess()
+            }
             },
 
             validationSchema:Yup.object().shape({
-                title:Yup.string().required("Title is Required"),
-                description:Yup.string().max(300, "The text must not exceed 300 characters.").required("Description Required")
+                title:Yup.string().required("Título é obrigatório"),
+                description:Yup.string().max(300, "The text must not exceed 300 characters.").required("Descrição é obrigatória")
             })
 
         }
@@ -30,11 +39,11 @@ export default function FormPost({onFormSubmitSuccess,user}){
 
     return(
                 <div className="wrapper-form">
-                    {user ? "" : <div className="alert-login"><span>To post, you need to be logged in.</span></div>}
+                    {user ? "" : <div className="alert-login"><span>Para postar Voce precisa estar logado.</span></div>}
                     <form onSubmit={formik.handleSubmit}>
-                        <h2>Advice a Mate</h2>
+                        <h2 className="form-subtitle">Deixe Seu Conselho</h2>
                         <div className=" form-field">
-                            <label htmlFor="title">Title</label>
+                            <label htmlFor="title">Titulo</label>
                             <input className={formik.touched.title && !!formik.errors.title ? "error-input" : "input-field"} id="title" name="title" type="text"
                             placeholder="Title"
                             {...formik.getFieldProps('title')}/>
@@ -43,19 +52,19 @@ export default function FormPost({onFormSubmitSuccess,user}){
                         </div>
 
                         <div className="form-field">
-                            <label htmlFor="description"></label>
+                            <label htmlFor="description">Descrição</label>
                             <textarea height={250}
                             className={formik.touched.description && !!formik.errors.description ? "error-input" : "input-field"}
                             id="description"
                             name="description"
                             placeholder="Let your Advice"
                             {...formik.getFieldProps('description')}/>
-                            {formik.touched.description && formik.errors.title && (
+                            {formik.touched.description && formik.errors.description && (
                                 <span className="error-description">{formik.errors.description}</span>
                             )}
                         </div>
 
-                        <button className="submit-btn" type="submit">Publish</button>
+                       { user ?  <button className="submit-btn" type="submit">Publicar</button> : ""}
                     </form>
                 </div>
     )
