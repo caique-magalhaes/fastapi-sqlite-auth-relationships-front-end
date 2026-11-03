@@ -36,8 +36,8 @@ export default function  App(){
 
   return(
         <main>
-          <FormPost user={user} onFormSubmitSuccess={scrollToPost}/>
-          <Post action='submitPost' targetRef={postSectionRef} />
+          <FormPost action='submitPost' user={user} onFormSubmitSuccess={scrollToPost}/>
+          <Post targetRef={postSectionRef} />
         </main>
   )
 }

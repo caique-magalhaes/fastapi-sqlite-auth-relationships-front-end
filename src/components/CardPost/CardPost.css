@@ -29,6 +29,7 @@
 .wrapper-like{
     display: flex;
     align-items: center;
+    margin-top: 10px;
     gap: 5px;
 }
 .wrapper-like span{
@@ -61,5 +62,10 @@
 }
 
 .cancel-btn:hover{
+    cursor: pointer;
+}
+.trash-btn{
+    width: 30px;
+    margin-left: 10px;
     cursor: pointer;
 }

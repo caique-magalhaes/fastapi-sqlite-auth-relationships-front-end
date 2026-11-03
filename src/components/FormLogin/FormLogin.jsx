@@ -5,7 +5,6 @@ import useApi from "../../hooks/useApi"
 import './FormLogin.css'
 
 export default function FormLogin(){
-    const {setUser} = useAuthContext()
     const {submitLogin} = useApi()
 
     const formik = useFormik({
@@ -14,7 +13,7 @@ export default function FormLogin(){
             password:''
         },
         onSubmit: async (values)=>{
-            await submitLogin(values,setUser)
+            await submitLogin(values)
             formik.resetForm()
 
         },
@@ -47,7 +46,7 @@ export default function FormLogin(){
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="password" 
+                    placeholder="Senha" 
                     className={formik.touched.password && !!formik.errors.password ? "error-input" : "input-field"}
                     {...formik.getFieldProps("password")}
                     />

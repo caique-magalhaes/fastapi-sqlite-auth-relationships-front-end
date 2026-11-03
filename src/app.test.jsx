@@ -7,6 +7,7 @@ import {expect, test, vi } from 'vitest';
 import FormPost from "./components/FormPost/FormPost"
 import FormRegister from "./components/FormRegister/FormRegister";
 import CardPost from "./components/CardPost/CardPost"
+import Post from "./components/Post/Post"
 import { faMoneyCheck } from "@fortawesome/free-solid-svg-icons";
 
 const mockNavigate = vi.fn()
@@ -347,6 +348,41 @@ describe("Forms Test", () =>{
         expect(postTitleText).toBeInTheDocument()
         expect(postDescriptionText).toBeInTheDocument()
 
+    })
+
+    test('CardPost - test delete button', async () => {
+        render(
+            <AuthProvider initialUser={mockUser}>
+                <PostProvider initialPost={[mockPost]}>
+                    <Post/>
+                </PostProvider>
+            </AuthProvider>
+        )
+        const postId = screen.getByText(`id:${mockPost.id}`)
+        const title = screen.getByText(mockPost.title)
+        const description = screen.getByText(mockPost.description)
+        const editButton = screen.getByAltText('icon edit')
+        const deleteButton = screen.getByAltText('trash icon')
+        const likeButton = screen.getByAltText('icon heart drawing')
+
+        expect(postId).toBeInTheDocument()
+        expect(deleteButton).toBeInTheDocument()
+        expect(title).toBeInTheDocument()
+        expect(description).toBeInTheDocument()
+        expect(editButton).toBeInTheDocument()
+        expect(likeButton).toBeInTheDocument()
+
+        fireEvent.click(deleteButton)
+
+        await waitFor(()=>{
+            expect(screen.queryByText(`id:${mockPost.id}`)).not.toBeInTheDocument()
+            expect(screen.queryByText(mockPost.title)).not.toBeInTheDocument()
+            expect(screen.queryByText(mockPost.description)).not.toBeInTheDocument()
+            expect(screen.queryByAltText('icon edit')).not.toBeInTheDocument()
+            expect(screen.queryByAltText('trash icon')).not.toBeInTheDocument()
+            expect(screen.queryByAltText('icon heart drawing')).not.toBeInTheDocument()
+
+        })
     })
 
 })

@@ -2,11 +2,12 @@ import './CardPost.css'
 import drawingHeart from '../../assets/drawing-heart.png'
 import filledHeart from '../../assets/filled-heart.png'
 import editIcon from '../../assets/edit.png'
+import trashCan from '../../assets/trash-can.png'
 import useApi from '../../hooks/useApi'
 import { useState } from 'react'
 import FormPost from '../FormPost/FormPost'
 export default function CardPost({post, like_post_ids, user}){
-    const {likePost} = useApi()
+    const {likePost,deletePost} = useApi()
     const [isEditing, setIsEditing] = useState(false)
     const likeAction = async (post_id) =>{
         await likePost(post_id)
@@ -35,6 +36,9 @@ export default function CardPost({post, like_post_ids, user}){
                 }
                 <span>{post.like_count}</span>
                 {post.user_id == user?.id ? <img onClick={()=>setIsEditing(true)} src={editIcon} className='edit-icon' alt='icon edit' role='button'   /> : ""}
+                {
+                    post.user_id == user?.id ? < img src={trashCan} onClick={()=> deletePost(post.id)} className='trash-btn' alt='trash icon' role='button' /> : ""
+                }
              </div>
         </section>
         )

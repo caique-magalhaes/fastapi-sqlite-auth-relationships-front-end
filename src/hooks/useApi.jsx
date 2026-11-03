@@ -3,11 +3,11 @@ import { usePostContext } from "../context/PostContext"
 import { useNavigate } from "react-router-dom"
 
 export default function useApi(){
-    const {setPost} = usePostContext()
+    const {posts,setPost} = usePostContext()
     const {setUser,user} = useAuthContext()
 
     const navigate = useNavigate()
-    async function submitLogin (values, setUser){
+    async function submitLogin (values){
             try {
                 const formData = new URLSearchParams()
                 formData.append('username', values.email)
@@ -89,7 +89,7 @@ export default function useApi(){
             if(response.ok){
                 const savePost = await response.json()
 
-                setPost((prevPost)=>prevPost.map((post)=>post.id == post_id ? {...post, title:savePost.title, description:savePost.description} : post))
+                setPost((prevPost)=>prevPost.map((post)=>post.id === post_id ? {...post, title:savePost.title, description:savePost.description} : post))
             }else {
             console.error(`Failed to edit post: Status ${response.status}`);
         }
@@ -131,6 +131,9 @@ export default function useApi(){
         }
     }
     async  function likePost(post_id){
+        if (!user) return
+        const previousPosts = posts
+        const previousUser = user
         const isLiked = user.like_post_ids.includes(post_id)
 
             setUser((prevUser) => ({
@@ -153,11 +156,14 @@ export default function useApi(){
                 credentials:'include'
             })
 
-            if (response.ok){
-                const data = await response.json()
-                console.log(`Success: ${data}`)
+            if (!response.ok){
+                setUser(previousUser)
+                setPost(previousPosts)
+                console.error(`Failed to Like the Post: ${response.status}`)
             }
         } catch (error) {
+            setUser(previousUser)
+            setPost(previousPosts)
             console.error(`Error:${error.message}`)
         }
     }
@@ -177,5 +183,26 @@ export default function useApi(){
         console.error(`error: ${error}`)
     }
     }
-    return {submitLogin, getAllPosts, submit, getUserPost,getUSer, likePost, logout, editPost}
+
+    async function deletePost(post_id){
+
+        const previousPosts = posts
+
+        setPost((prevPost)=>(prevPost.filter((post)=> post.id !== post_id)))
+
+        try {
+            const response = await fetch(`http://localhost:8000/post/post-delete/${post_id}`, {
+                method:"DELETE",
+                credentials:'include'
+            })
+            if(!response.ok){
+                setPost(previousPosts)
+                console.error(`Failed to delete post: ${response.status}`)
+            }
+        } catch (error) {
+            console.error(`Error deleting post: ${error.message}`)
+            setPost(previousPosts)
+        }
+    }
+    return {submitLogin, getAllPosts, submit, getUserPost,getUSer, likePost, logout, editPost, deletePost}
 }

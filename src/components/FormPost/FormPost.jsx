@@ -45,7 +45,7 @@ export default function FormPost({onFormSubmitSuccess,user,action,post}){
                         <div className=" form-field">
                             <label htmlFor="title">Titulo</label>
                             <input className={formik.touched.title && !!formik.errors.title ? "error-input" : "input-field"} id="title" name="title" type="text"
-                            placeholder="Title"
+                            placeholder="Título"
                             {...formik.getFieldProps('title')}/>
 
                             {formik.touched.title && formik.errors.title && (<span className="error-description">{formik.errors.title}</span>)}
@@ -57,7 +57,7 @@ export default function FormPost({onFormSubmitSuccess,user,action,post}){
                             className={formik.touched.description && !!formik.errors.description ? "error-input" : "input-field"}
                             id="description"
                             name="description"
-                            placeholder="Let your Advice"
+                            placeholder="Deixe seu Conselho"
                             {...formik.getFieldProps('description')}/>
                             {formik.touched.description && formik.errors.description && (
                                 <span className="error-description">{formik.errors.description}</span>
