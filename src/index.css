@@ -31,7 +31,9 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 
-	line-height: 1;
+  line-height: 1;
+  min-height: 100vh;
+  height: 100%;
   font-family: var(--main-font);
 }
 ol, ul {
@@ -48,4 +50,11 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+#root{
+	min-height: 100vh;
+	height: 100%;
+	padding: 0;
+	margin: 0;
 }

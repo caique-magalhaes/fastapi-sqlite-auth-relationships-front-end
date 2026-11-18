@@ -1,0 +1,19 @@
+.terms{
+    min-height: 75vh;
+    margin-left:20px ;
+    width: 60%;
+}
+
+.terms h1, h2{
+    margin: 15px 0;
+    font-weight: bolder;
+}
+
+.terms li{
+    margin-bottom: 15px;
+    margin-left: 25px;
+}
+
+.terms ul{
+    list-style-type: disc;
+}

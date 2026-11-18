@@ -1,5 +1,5 @@
 import { useFormik } from "formik"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import * as Yup from 'yup'
 export default function FormRegister(){
     const navigate = useNavigate()
@@ -15,6 +15,7 @@ export default function FormRegister(){
                 email: values.email,
                 password: values.password,
                 name: values.name,
+                username:values.username,
                 confirm_password: values.confirm_password,
                 country: values.country
 
@@ -44,8 +45,10 @@ export default function FormRegister(){
             email:'',
             password:'',
             name:'',
+            username:'',
             confirm_password:'',
-            country:''
+            country:'',
+            terms:false
 
         },
         onSubmit: async (values)=>{
@@ -63,9 +66,11 @@ export default function FormRegister(){
             .matches(/[a-z]/, "Deve conter ao menos uma letra minúscula ")
             .matches(/[0-9]/, "Deve conter ao menos um número")
             .required("A senha é obrigatória"),
-            name:Yup.string().required("Nome é Obrigatório"),
+            name:Yup.string().max(30).required("Nome é Obrigatório"),
+            username:Yup.string().max(30).required("Nome de usuario é Obrigatório"),
             confirm_password:Yup.string().oneOf([Yup.ref('password')], 'As senhas não coincidem').required("Confirmação de senha deve ser preenchida"),
-            country:Yup.string().required("País deve ser selecionado")
+            country:Yup.string().required("País deve ser selecionado"),
+            terms: Yup.boolean().oneOf([true], "Voce deve aceitar os Termos e Condições")
         })
     })
     return(
@@ -82,6 +87,19 @@ export default function FormRegister(){
                     {...formik.getFieldProps("name")}
                     />
                     {formik.touched.name && formik.errors.name && (<span className="error-description">{formik.errors.name}</span>)}
+                </div>
+
+                <div className="form-field">
+                    <label htmlFor="username">Nome de usuário</label>
+                    <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Nome de usuário"
+                    className={formik.touched.username && !!formik.errors.username ? "error-input" : "input-field"}
+                    {...formik.getFieldProps("username")}
+                    />
+                    {formik.touched.username && formik.errors.username && (<span className="error-description">{formik.errors.username}</span>)}
                 </div>
 
                 <div className="form-field">
@@ -136,6 +154,13 @@ export default function FormRegister(){
                     {...formik.getFieldProps("confirm_password")}
                     />
                     {formik.touched.confirm_password && formik.errors.confirm_password && (<span className="error-description">{formik.errors.confirm_password}</span>)}
+                </div>
+                <div className="form-field-check">
+                    <input type="checkbox" name="terms" id="terms"
+                    {...formik.getFieldProps("terms")}
+                    />
+                    <label htmlFor="terms" id="label-terms"><Link to='/terms'> Li e aceito os Termos e Condições </Link> </label>
+                    {formik.errors.terms && <span className="error-description">{formik.errors.terms}</span>}
                 </div>
                 <button className="submit-btn">Registrar</button>
             </form>

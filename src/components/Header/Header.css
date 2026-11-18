@@ -28,7 +28,7 @@
 .header-title a{
     color: #6B9080;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .header-group{
@@ -47,4 +47,10 @@
 }
 .btn-logout:hover{
     cursor: pointer;
+}
+.header-user-veryfi{
+    background-color: #f89797;
+    color: #ff3333;
+    text-align: center;
+    padding: 10px;
 }

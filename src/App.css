@@ -45,7 +45,7 @@ body{
 }
 
 .wrapper-form{
-    margin: 50px 30%;
+    margin: 50px 25%;
 }
 
 .wrapper-form h2{
@@ -75,4 +75,10 @@ body{
 
 .wrapper-post h4{
     margin: 10px 0;
+}
+
+.form-field-check{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

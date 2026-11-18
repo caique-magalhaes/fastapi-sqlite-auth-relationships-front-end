@@ -9,6 +9,11 @@ import FormPost from '../FormPost/FormPost'
 export default function CardPost({post, like_post_ids, user}){
     const {likePost,deletePost} = useApi()
     const [isEditing, setIsEditing] = useState(false)
+    const date = new Date(post.created_at)
+    const configDate = Intl.DateTimeFormat('pt-BR',{
+        dateStyle:"short",
+        timeStyle:'short'
+    }).format(date)
     const likeAction = async (post_id) =>{
         await likePost(post_id)
     }
@@ -32,7 +37,7 @@ export default function CardPost({post, like_post_ids, user}){
             <p className='card-description'>{post.description}</p>
             <div className='wrapper-like'>
                 {
-                    like_post_ids ? <img onClick={()=>likeAction(post.id)} src={filledHeart} className='icon-heart-filled' alt='icon heart filled' role='button'/> : <img  onClick={()=>likeAction(post.id)} src={drawingHeart} className='icon-heart-drawing' alt='icon heart drawing' role='button'/>
+                    like_post_ids?.includes(post.id) ? <img onClick={()=>likeAction(post.id)} src={filledHeart} className='icon-heart-filled' alt='icon heart filled' role='button'/> : <img  onClick={()=>likeAction(post.id)} src={drawingHeart} className='icon-heart-drawing' alt='icon heart drawing' role='button'/>
                 }
                 <span>{post.like_count}</span>
                 {post.user_id == user?.id ? <img onClick={()=>setIsEditing(true)} src={editIcon} className='edit-icon' alt='icon edit' role='button'   /> : ""}
@@ -40,6 +45,8 @@ export default function CardPost({post, like_post_ids, user}){
                     post.user_id == user?.id ? < img src={trashCan} onClick={()=> deletePost(post.id)} className='trash-btn' alt='trash icon' role='button' /> : ""
                 }
              </div>
+             <p className='card-created-at'><span>~</span>{configDate}</p>
+             <p className='card-username'><span>@</span>{post.user_name}</p>
         </section>
         )
 }

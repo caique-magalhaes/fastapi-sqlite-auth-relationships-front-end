@@ -35,7 +35,7 @@ export default function Profile(){
             {
                 user ?
                     <main className="wrapper-post">
-                        <h2>@{user.name}  <FontAwesomeIcon icon={faUser} size="75px" /></h2>
+                        <h2>@{user.username}  <FontAwesomeIcon icon={faUser} size="75px" /></h2>
                         <h3 className="wrapper-post-subtitle">Your posts</h3>
                         {
                             posts ? posts.map((post)=>(<CardPost post={post} key={post.id} user_id={user.id} post_like_count={post.like_count} like_post_ids={(likedIds).includes(post.id) ? likedIds : null }/>)):

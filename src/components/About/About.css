@@ -1,0 +1,16 @@
+.about-container{
+    min-height: 75vh;
+    margin-left:20px ;
+    width: 60%;
+}
+
+.about-container h2{
+    margin: 15px 0;
+}
+.about-container p{
+    margin-bottom: 15px;
+}
+
+.about-container strong{
+    font-weight: bolder;
+}

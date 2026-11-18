@@ -8,13 +8,14 @@ import FormPost from "./components/FormPost/FormPost"
 import FormRegister from "./components/FormRegister/FormRegister";
 import CardPost from "./components/CardPost/CardPost"
 import Post from "./components/Post/Post"
-import { faMoneyCheck } from "@fortawesome/free-solid-svg-icons";
+import { BrowserRouter } from "react-router-dom";
 
 const mockNavigate = vi.fn()
 
 const mockUser = {
     id:1,
     name:"Bryan Adams",
+    username:"bryan",
     email:"bryan@gmail.com",
     country:"Brazil",
     like_post_ids: [],
@@ -26,11 +27,12 @@ const mockPost = {
     title:'Test',
     description:'Just a Test',
     user_id:1,
-    like_count:0
+    like_count:0,
+    created_at: new Date('2026-01-01T12:00:00Z')
 }
 
-vi.mock("react-router-dom", ()=>{
-    const actual = vi.importActual("react-router-dom")
+vi.mock("react-router-dom", async (importOriginal)=>{
+    const actual = await importOriginal()
 
     return{
         ...actual,
@@ -150,11 +152,13 @@ describe("Forms Test", () =>{
 
     test("FormRegister - display validations errors", async ()=>{
         render(
-            <AuthProvider>
-                <PostProvider>
-                    <FormRegister/>
-                </PostProvider>
-            </AuthProvider>
+            <BrowserRouter>
+                <AuthProvider>
+                    <PostProvider>
+                        <FormRegister/>
+                    </PostProvider>
+                </AuthProvider>
+            </BrowserRouter>
         )
 
         const registerButton = screen.getByRole("button", {
@@ -163,8 +167,10 @@ describe("Forms Test", () =>{
 
         fireEvent.click(registerButton)
 
+        const checkRequired = await screen.findByText(/Voce deve aceitar os Termos e Condições/i)
         const emailRequired = await screen.findByText(/Email é Obrigatório/i)
         const passwordRequired = await screen.findByText(/A senha é obrigatória/i)
+        const usernameRequired = await screen.findByText(/Nome de usuario é Obrigatório/i)
         const nameRequired = await screen.findByText(/Nome é Obrigatório/i)
         const confirmPasswordRequired = await screen.findByText(/Confirmação de senha deve ser preenchida/i)
         const countryRequired = await screen.findByText(/País deve ser selecionado/i)
@@ -175,16 +181,20 @@ describe("Forms Test", () =>{
             expect(nameRequired).toBeInTheDocument()
             expect(confirmPasswordRequired).toBeInTheDocument()
             expect(countryRequired).toBeInTheDocument()
+            expect(usernameRequired).toBeInTheDocument()
+            expect(checkRequired).toBeInTheDocument()
         })
     })
 
     test("FormRegister - Clear Input", async ()=>{
         render(
-        <AuthProvider >
-            <PostProvider>
-                <FormRegister/>
-            </PostProvider>
-        </AuthProvider>
+        <BrowserRouter>
+            <AuthProvider >
+                <PostProvider>
+                    <FormRegister/>
+                </PostProvider>
+            </AuthProvider>
+        </BrowserRouter>
     )
 
         const submitButton = screen.getByRole("button",{
@@ -192,26 +202,31 @@ describe("Forms Test", () =>{
         })
 
         const emailInput = screen.getByLabelText(/Email/i)
-        const nameInput = screen.getByLabelText(/Nome/i)
+        const nameInput = screen.getByLabelText(/^Nome$/i)
+        const usernameInput = screen.getByLabelText(/Nome de usuário/i)
 
         const countryInput = screen.getByLabelText(/País/i)
         const passwordInput = screen.getByLabelText(/^senha$/i)
         const confirmPasswordInput = screen.getByLabelText(/Confirme a Senha/i)
+        const check = screen.getByRole('checkbox', {
+            name: /Li e aceito os Termos e Condições/i
+        })
 
         fireEvent.change(nameInput, {target:{value:mockUser.name}})
         fireEvent.change(emailInput, {target:{value:mockUser.email}})
         fireEvent.change(passwordInput, {target:{value:mockUser.password}})
         fireEvent.change(confirmPasswordInput, {target:{value:mockUser.password}})
         fireEvent.change(countryInput, {target:{value: mockUser.country}})
-        
+        fireEvent.change(usernameInput, {target:{value: mockUser.username}})
+        fireEvent.click(check)
 
         expect(nameInput).toHaveValue("Bryan Adams")
         expect(emailInput).toHaveValue("bryan@gmail.com")
         expect(passwordInput).toHaveValue("Abc123456")
         expect(countryInput).toHaveValue("Brazil")
         expect(confirmPasswordInput).toHaveValue("Abc123456")
-        
-        
+        expect(usernameInput).toHaveValue("bryan")
+        expect(check).toBeChecked()
 
         fireEvent.click(submitButton)
 
@@ -221,6 +236,7 @@ describe("Forms Test", () =>{
             expect(passwordInput).toHaveValue("")
             expect(countryInput).toHaveValue("")
             expect(confirmPasswordInput).toHaveValue("")
+            expect(usernameInput).toHaveValue("")
         })
 
     })

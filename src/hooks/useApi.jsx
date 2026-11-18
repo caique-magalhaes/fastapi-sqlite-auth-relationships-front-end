@@ -57,14 +57,14 @@ export default function useApi(){
 
             body:JSON.stringify({
                 title: data.title,
-                description: data.description
+                description: data.description,
             })
         })
         if(response.ok){
             const savePost = await response.json()
 
             setPost((prevPost) => [{
-                id:savePost.id, title: savePost.title, description: savePost.description, user_id: savePost.user_id, like_count:0}, ...prevPost])
+                id:savePost.id, title: savePost.title, description: savePost.description, user_id: savePost.user_id, like_count:0, user_name:savePost.user_name,created_at:savePost.created_at}, ...prevPost])
         }
         } catch (error) {
             console.error(`Failed to save post to backend: ${error})`)
